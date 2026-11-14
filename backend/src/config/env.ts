@@ -9,8 +9,12 @@ const envSchema = z.object({
     DATABASE_URL: z.string(),
     REDIS_HOST: z.string().default('localhost'),
     REDIS_PORT: z.coerce.number().default(6379),
-    JWT_SECRET: z.string().min(16),
-});
+    JWT_REFRESH_SECRET: z.string().min(16),
+    JWT_ACCESS_SECRET: z.string().min(16),
+    CLOUDINARY_CLOUD_NAME: z.string(),
+    CLOUDINARY_API_KEY: z.string(),
+    CLOUDINARY_API_SECRET: z.string()
+})
 
 const parsed = envSchema.safeParse(process.env);
 

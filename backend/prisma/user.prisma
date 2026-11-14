@@ -17,12 +17,13 @@ model User {
     updatedAt DateTime @updatedAt
 
     // Relations
-    organization Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-    department   Department?       @relation(fields: [departmentId], references: [id], onDelete: SetNull)
-    roles        UserRole[]
-    requests     PurchaseRequest[] @relation("Requester")
-    approvals    ApprovalStep[]    @relation("Approver")
-    auditLogs    AuditLog[]
+    organization  Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+    department    Department?       @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+    roles         UserRole[]
+    requests      PurchaseRequest[] @relation("Requester")
+    approvals     ApprovalStep[]    @relation("Approver")
+    auditLogs     AuditLog[]
+    refreshTokens RefreshToken[]
 
     @@index([organizationId])
     @@index([departmentId])
@@ -48,4 +49,16 @@ model UserRole {
     role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
 
     @@id([userId, roleId])
+}
+
+model RefreshToken {
+    id        String   @id @default(uuid())
+    userId    String
+    tokenHash String   @unique
+    expiresAt DateTime
+    createdAt DateTime @default(now())
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
 }
