@@ -1,0 +1,23 @@
+model PurchaseRequest {
+    id             String        @id @default(uuid())
+    organizationId String
+    departmentId   String
+    requesterId    String
+    title          String
+    description    String?
+    estimatedCost  Decimal       @db.Decimal(10, 2)
+    status         RequestStatus @default(DRAFT)
+    createdAt      DateTime      @default(now())
+    updatedAt      DateTime      @updatedAt
+
+    // Relations
+    organization  Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+    department    Department     @relation(fields: [departmentId], references: [id])
+    requester     User           @relation("Requester", fields: [requesterId], references: [id])
+    approvals     ApprovalStep[]
+    purchaseOrder PurchaseOrder?
+
+    @@index([organizationId])
+    @@index([departmentId])
+    @@index([status])
+}

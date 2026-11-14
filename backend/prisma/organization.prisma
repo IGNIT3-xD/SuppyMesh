@@ -1,0 +1,29 @@
+model Organization {
+    id        String   @id @default(uuid())
+    name      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    departments Department[]
+    users       User[]
+    suppliers   Supplier[]
+    requests    PurchaseRequest[]
+    pos         PurchaseOrder[]
+    invoices    Invoice[]
+    auditLogs   AuditLog[]
+}
+
+model Department {
+    id             String   @id @default(uuid())
+    organizationId String
+    name           String
+    createdAt      DateTime @default(now())
+
+    // Relations
+    organization Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+    users        User[]
+    requests     PurchaseRequest[]
+
+    @@index([organizationId])
+}
