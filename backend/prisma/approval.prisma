@@ -1,0 +1,19 @@
+model ApprovalStep {
+    id         String         @id @default(uuid())
+    requestId  String
+    approverId String?
+    roleId     String // e.g., Finance
+    status     ApprovalStatus @default(PENDING)
+    comments   String?
+    order      Int
+    createdAt  DateTime       @default(now())
+    updatedAt  DateTime       @updatedAt
+
+    // Relations
+    request  PurchaseRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+    approver User?           @relation("Approver", fields: [approverId], references: [id])
+    role     Role            @relation(fields: [roleId], references: [id])
+
+    @@index([requestId])
+    @@index([approverId])
+}

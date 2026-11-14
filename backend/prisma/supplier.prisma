@@ -1,0 +1,44 @@
+model Supplier {
+    id             String         @id @default(uuid())
+    organizationId String
+    name           String
+    email          String
+    category       String?
+    status         SupplierStatus @default(DRAFT)
+    riskScore      Float          @default(0.0)
+    createdAt      DateTime       @default(now())
+    updatedAt      DateTime       @updatedAt
+
+    // Relations
+    organization Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+    documents    SupplierDocument[]
+    performances SupplierPerformance[]
+    pos          PurchaseOrder[]
+    invoices     Invoice[]
+
+    @@index([organizationId])
+}
+
+model SupplierDocument {
+    id         String   @id @default(uuid())
+    supplierId String
+    fileUrl    String
+    docType    String // e.g., "TAX_CERTIFICATE", "NDA"
+    createdAt  DateTime @default(now())
+
+    supplier Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+    @@index([supplierId])
+}
+
+model SupplierPerformance {
+    id            String   @id @default(uuid())
+    supplierId    String
+    deliveryScore Float
+    qualityScore  Float
+    evaluatedAt   DateTime @default(now())
+
+    supplier Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+    @@index([supplierId])
+}

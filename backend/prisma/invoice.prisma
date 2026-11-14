@@ -1,0 +1,33 @@
+model Invoice {
+    id             String        @id @default(uuid())
+    organizationId String
+    poId           String
+    supplierId     String
+    invoiceNumber  String
+    amount         Decimal       @db.Decimal(10, 2)
+    status         InvoiceStatus @default(PENDING_MATCH)
+    dueDate        DateTime
+    createdAt      DateTime      @default(now())
+
+    // Relations
+    organization Organization  @relation(fields: [organizationId], references: [id])
+    po           PurchaseOrder @relation(fields: [poId], references: [id])
+    supplier     Supplier      @relation(fields: [supplierId], references: [id])
+    payments     Payment[]
+
+    @@index([organizationId])
+    @@index([poId])
+}
+
+model Payment {
+    id             String        @id @default(uuid())
+    invoiceId      String
+    amount         Decimal       @db.Decimal(10, 2)
+    status         PaymentStatus @default(PENDING)
+    transactionRef String? // External bank reference
+    paidAt         DateTime?
+
+    invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+    @@index([invoiceId])
+}

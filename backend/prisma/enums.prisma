@@ -1,0 +1,54 @@
+enum UserStatus {
+    PENDING
+    ACTIVE
+    SUSPENDED
+}
+
+enum SupplierStatus {
+    DRAFT
+    PENDING_VERIFICATION
+    ACTIVE
+    INACTIVE
+    BLACKLISTED
+}
+
+enum RequestStatus {
+    DRAFT
+    PENDING_APPROVAL
+    APPROVED
+    REJECTED
+    PO_CREATED
+}
+
+enum ApprovalStatus {
+    PENDING
+    APPROVED
+    REJECTED
+}
+
+enum PurchaseOrderStatus {
+    ISSUED
+    PARTIALLY_DELIVERED
+    COMPLETED
+    CANCELLED
+}
+
+enum InvoiceStatus {
+    PENDING_MATCH
+    DISCREPANCY
+    MATCHED
+    PAID
+}
+
+enum PaymentStatus {
+    PENDING
+    COMPLETED
+    FAILED
+    REFUNDED
+}
+
+enum AuthProvider {
+    CREDENTIAL
+    GOOGLE
+    FACEBOOK
+}
